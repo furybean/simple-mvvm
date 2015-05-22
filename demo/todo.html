@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Todo Demo</title>
+  <meta charset="utf-8">
+  <script type="text/javascript" src="../dist/mvvm.js"></script>
+  <style type="text/css">
+    #demo {
+      width: 300px;
+      margin: 100px auto;
+    }
+
+    #demo > input {
+      padding: 10px;
+      width: 180px;
+    }
+
+    #demo > button {
+      padding: 10px 30px;
+      margin-left: 3px;
+      border: 0;
+      background: #1E89E0;
+      color: white;
+      border-radius: 3px;
+    }
+
+    #demo ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    #demo ul li {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    #demo ul li a {
+      text-decoration: none;
+      float: right;
+      color: #F44548;
+    }
+
+    #demo ul li span.done {
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+
+<div id="demo"> 
+  <input d-model="newTodo" placeholder="Input your new todo"/> 
+  <button d-click="add()">Add</button>
+  <ul> 
+    <li d-repeat="item in todos"> 
+      <input type="checkbox" d-model="item.done"/> 
+      <span d-class="done:item.done">{{item.title}}</span> 
+      <a href="Javascript:" d-click="remove(item)">Remove</a> 
+    </li>
+  </ul>
+</div>
+<script>
+  var context = {
+    newTodo: "",
+    todos: [
+      { title: 'first', done: true },
+      { title: 'second', done: false }
+    ],
+    add: function () {
+      this.todos.push({ title: this.newTodo, done: false });
+      this.newTodo = '';
+    },
+    remove: function (item) {
+      this.todos.splice(this.todos.indexOf(item), 1);
+    }
+  };
+
+  $compile(document.getElementById('demo'), context);
+</script>
+</body>
+</html>
