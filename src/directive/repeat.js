@@ -100,9 +100,9 @@ var RepeatDirective = Class(Directive, {
 
     removed.forEach(function (removeContext) {
       var key = trackByFn.apply(removeContext);
-      var dom = itemElementMap[key];
-      if (dom) {
-        dom.parentNode && dom.parentNode.removeChild(dom);
+      var el = itemElementMap[key];
+      if (el) {
+        el.parentNode && el.parentNode.removeChild(el);
       }
       removeContext.$destroy && removeContext.$destroy();
       delete itemElementMap[key];
@@ -130,8 +130,8 @@ var RepeatDirective = Class(Directive, {
 
     moved.forEach(function(moveContext) {
       var key = trackByFn.apply(moveContext);
-      var dom = itemElementMap[key];
-      if (!dom) {
+      var el = itemElementMap[key];
+      if (!el) {
         throw new Error('some error happen when diff');
       }
 
@@ -144,7 +144,7 @@ var RepeatDirective = Class(Directive, {
         refNode = commentNode;
       }
 
-      insertAfter(dom, refNode);
+      insertAfter(el, refNode);
     })
   },
 

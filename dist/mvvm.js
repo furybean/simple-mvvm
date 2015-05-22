@@ -1172,7 +1172,7 @@ function walk(node, callback) {
   }
 }
 
-var bindDirs = function(dom, dirs, context) {
+var bindDirs = function(element, dirs, context) {
   for (var i = 0, j = dirs.length; i < j; i++) {
     var dir = dirs[i];
     var type = dir.type;
@@ -1182,12 +1182,12 @@ var bindDirs = function(dom, dirs, context) {
       for (var k = 0, l = pairs.length; k < l; k++) {
         var pair = pairs[k];
         createDirective(dir.type, {
-          element: dom, expression: pair.value, context: context, key: pair.key, attr: dir.attr
+          element: element, expression: pair.value, context: context, key: pair.key, attr: dir.attr
         });
       }
     } else {
       createDirective(dir.type, {
-        element: dom, expression: dir.value, context: context, attr: dir.attr
+        element: element, expression: dir.value, context: context, attr: dir.attr
       });
     }
   }
@@ -1196,11 +1196,11 @@ var bindDirs = function(dom, dirs, context) {
 var compile = function(element, context) {
   context = new ViewModel(context);
 
-  walk(element, function(dom) {
+  walk(element, function(el) {
     var dirs = [];
 
-    if (dom.nodeType === 1) {
-      var attributes = dom.attributes;
+    if (el.nodeType === 1) {
+      var attributes = el.attributes;
 
       for (var i = 0, j = attributes.length; i < j; i++){
         var attrNode = attributes.item(i);
@@ -1224,13 +1224,13 @@ var compile = function(element, context) {
         }
 
         if (attrName === 'd-repeat') {
-          createDirective('d-repeat', { element: dom, expression: attrNode.nodeValue, context: context });
+          createDirective('d-repeat', { element: el, expression: attrNode.nodeValue, context: context });
 
           return false;
         }
       }
-    } else if (dom.nodeType === 3) {
-      var text = dom.nodeValue;
+    } else if (el.nodeType === 3) {
+      var text = el.nodeValue;
 
       if (maybeIncludeExpression(text)) {
         var expression = inlineText(text);
@@ -1242,7 +1242,7 @@ var compile = function(element, context) {
     }
 
     if (dirs.length > 0) {
-      bindDirs(dom, dirs, context);
+      bindDirs(el, dirs, context);
     }
   });
 };
@@ -1602,9 +1602,9 @@ var RepeatDirective = Class(Directive, {
 
     removed.forEach(function (removeContext) {
       var key = trackByFn.apply(removeContext);
-      var dom = itemElementMap[key];
-      if (dom) {
-        dom.parentNode && dom.parentNode.removeChild(dom);
+      var el = itemElementMap[key];
+      if (el) {
+        el.parentNode && el.parentNode.removeChild(el);
       }
       removeContext.$destroy && removeContext.$destroy();
       delete itemElementMap[key];
@@ -1632,8 +1632,8 @@ var RepeatDirective = Class(Directive, {
 
     moved.forEach(function(moveContext) {
       var key = trackByFn.apply(moveContext);
-      var dom = itemElementMap[key];
-      if (!dom) {
+      var el = itemElementMap[key];
+      if (!el) {
         throw new Error('some error happen when diff');
       }
 
@@ -1646,7 +1646,7 @@ var RepeatDirective = Class(Directive, {
         refNode = commentNode;
       }
 
-      insertAfter(dom, refNode);
+      insertAfter(el, refNode);
     })
   },
 

@@ -27,7 +27,7 @@ function walk(node, callback) {
   }
 }
 
-var bindDirs = function(dom, dirs, context) {
+var bindDirs = function(element, dirs, context) {
   for (var i = 0, j = dirs.length; i < j; i++) {
     var dir = dirs[i];
     var type = dir.type;
@@ -37,12 +37,12 @@ var bindDirs = function(dom, dirs, context) {
       for (var k = 0, l = pairs.length; k < l; k++) {
         var pair = pairs[k];
         createDirective(dir.type, {
-          element: dom, expression: pair.value, context: context, key: pair.key, attr: dir.attr
+          element: element, expression: pair.value, context: context, key: pair.key, attr: dir.attr
         });
       }
     } else {
       createDirective(dir.type, {
-        element: dom, expression: dir.value, context: context, attr: dir.attr
+        element: element, expression: dir.value, context: context, attr: dir.attr
       });
     }
   }
@@ -51,11 +51,11 @@ var bindDirs = function(dom, dirs, context) {
 var compile = function(element, context) {
   context = new ViewModel(context);
 
-  walk(element, function(dom) {
+  walk(element, function(el) {
     var dirs = [];
 
-    if (dom.nodeType === 1) {
-      var attributes = dom.attributes;
+    if (el.nodeType === 1) {
+      var attributes = el.attributes;
 
       for (var i = 0, j = attributes.length; i < j; i++){
         var attrNode = attributes.item(i);
@@ -79,13 +79,13 @@ var compile = function(element, context) {
         }
 
         if (attrName === 'd-repeat') {
-          createDirective('d-repeat', { element: dom, expression: attrNode.nodeValue, context: context });
+          createDirective('d-repeat', { element: el, expression: attrNode.nodeValue, context: context });
 
           return false;
         }
       }
-    } else if (dom.nodeType === 3) {
-      var text = dom.nodeValue;
+    } else if (el.nodeType === 3) {
+      var text = el.nodeValue;
 
       if (maybeIncludeExpression(text)) {
         var expression = inlineText(text);
@@ -97,7 +97,7 @@ var compile = function(element, context) {
     }
 
     if (dirs.length > 0) {
-      bindDirs(dom, dirs, context);
+      bindDirs(el, dirs, context);
     }
   });
 };
