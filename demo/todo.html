@@ -48,14 +48,14 @@
 </head>
 <body>
 
-<div id="demo"> 
-  <input d-model="newTodo" placeholder="Input your new todo"/> 
+<div id="demo">
+  <input d-model="newTodo" placeholder="Input your new todo"/>
   <button d-click="add()">Add</button>
-  <ul> 
-    <li d-repeat="item in todos"> 
-      <input type="checkbox" d-model="item.done"/> 
-      <span d-class="done:item.done">{{item.title}}</span> 
-      <a href="Javascript:" d-click="remove(item)">Remove</a> 
+  <ul>
+    <li d-repeat="item in todos">
+      <input type="checkbox" d-model="item.done"/>
+      <span d-class="done:item.done">{{item.title}}</span>
+      <a href="Javascript:" d-click="remove(item)">Remove</a>
     </li>
   </ul>
 </div>

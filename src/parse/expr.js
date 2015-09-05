@@ -3,8 +3,6 @@ var jsep = require('jsep');
 var parsedCache = {};
 var dependsCache = {};
 
-//jsep.addBinaryOp('=', 1);
-
 function parseExpr(string) {
 
   var depends;
